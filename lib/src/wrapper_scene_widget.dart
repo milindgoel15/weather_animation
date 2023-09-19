@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -11,11 +12,17 @@ class WrapperScene extends StatelessWidget {
   const WrapperScene({
     Key? key,
     this.sizeCanvas = const Size(350.0, 540.0),
-    this.decoration = const BoxDecoration(),
     this.clip = Clip.antiAlias,
-    this.isLeftCornerGradient,
+    this.decoration = const BoxDecoration(),
     required this.children,
+    this.isLeftCornerGradient,
     required this.colors,
+    required this.alignmentGeometry,
+    required this.tempWidget,
+    required this.dateWidget,
+    required this.locWidget,
+    required this.mainAxisAlignment,
+    this.isBackgroundShown = true,
   }) : super(key: key);
 
   /// Widget size. Default to [Size(350.0, 540.0)].
@@ -40,6 +47,16 @@ class WrapperScene extends StatelessWidget {
   /// Scene background colors. See [BackgroundWidget] for more details.
   final List<Color> colors;
 
+  final AlignmentGeometry alignmentGeometry;
+
+  final Widget tempWidget;
+  final Widget dateWidget;
+  final Widget locWidget;
+  final MainAxisAlignment mainAxisAlignment;
+
+  /// Shows a static colored gradient as background (default: true)
+  final bool? isBackgroundShown;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -58,12 +75,32 @@ class WrapperScene extends StatelessWidget {
           return BackgroundWidget(
             colors: colors,
             isLeftCorner: isLeftCornerGradient,
-            child: Transform.scale(
-              alignment: Alignment.topLeft,
-              scale: scaleTrue,
-              child: Stack(
-                children: children,
-              ),
+            isBackgroundShown: isBackgroundShown,
+            child: Column(
+              children: [
+                dateWidget,
+                Padding(
+                  padding: const EdgeInsets.all(4),
+                  child: Row(
+                    mainAxisAlignment: mainAxisAlignment,
+                    children: [
+                      SizedBox(
+                        height: 128,
+                        width: 128,
+                        child: Transform.scale(
+                          alignment: alignmentGeometry,
+                          scale: scaleTrue,
+                          child: Stack(
+                            children: children,
+                          ),
+                        ),
+                      ),
+                      tempWidget
+                    ],
+                  ),
+                ),
+                locWidget,
+              ],
             ),
           );
         },

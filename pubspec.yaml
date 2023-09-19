@@ -3,7 +3,7 @@ description: The package contains beautiful weather animations. Easy setup with 
 homepage: https://t.me/+AkGV73kZi_Q1YTMy
 repository: https://github.com/PackRuble/weather_animation
 
-version: 0.0.2
+version: 0.0.3
 
 environment:
   sdk: ">=2.17.0 <3.0.0"
