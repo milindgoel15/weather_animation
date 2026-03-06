@@ -22,7 +22,7 @@ int _getCountDecimal(num value) {
 
 class SliderWidget extends StatefulWidget {
   const SliderWidget({
-    Key? key,
+    super.key,
     required this.onChanged,
     this.onChangeEnd,
     required this.value,
@@ -42,8 +42,7 @@ class SliderWidget extends StatefulWidget {
             'then `onReset` cannot be null'),
         assert(max != null || autoMax != null,
             'The maximum value must be specified, in the only way'),
-        assert((autoMax ?? 2) > 1),
-        super(key: key);
+        assert((autoMax ?? 2) > 1);
 
   final double value;
   final double min;
@@ -197,7 +196,7 @@ class _SliderWidgetState extends State<SliderWidget> {
                     ],
                     const SizedBox(width: 2.0),
                     _ButtonSlider(
-                      iconData: Icons.chevron_left_rounded,
+                      icon: const Icon(Icons.chevron_left_rounded),
                       onTap: _decrease,
                       onLongPress: () => _startTimer(_decrease),
                       onLongPressUp: _stopTimer,
@@ -214,7 +213,7 @@ class _SliderWidgetState extends State<SliderWidget> {
                       ),
                     ),
                     _ButtonSlider(
-                      iconData: Icons.chevron_right_rounded,
+                      icon: const Icon(Icons.chevron_right_rounded),
                       onTap: _increase,
                       onLongPress: () => _startTimer(_increase),
                       onLongPressUp: _stopTimer,
@@ -276,14 +275,14 @@ class _SliderWidgetState extends State<SliderWidget> {
 
 class _ButtonSlider extends StatelessWidget {
   const _ButtonSlider({
-    Key? key,
+    super.key,
     required this.onTap,
     required this.onLongPress,
     required this.onLongPressUp,
-    required this.iconData,
-  }) : super(key: key);
+    required this.icon,
+  });
 
-  final IconData iconData;
+  final Icon icon;
 
   final Function() onTap;
 
@@ -293,8 +292,6 @@ class _ButtonSlider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return GestureDetector(
       onLongPress: onLongPress,
       onLongPressUp: onLongPressUp,
@@ -302,33 +299,7 @@ class _ButtonSlider extends StatelessWidget {
         padding: const EdgeInsets.all(2.0),
         visualDensity: VisualDensity.compact,
         onPressed: onTap,
-        icon: Icon(
-          iconData,
-          color: theme.iconTheme.color,
-        ),
-      ),
-    );
-  }
-}
-
-void main() => runApp(const MaterialApp(home: TestSlider()));
-
-class TestSlider extends StatelessWidget {
-  const TestSlider({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: SliderWidget(
-          onChanged: null,
-          value: 5,
-          isShowReset: true,
-          onReset: () {},
-          isShowValue: true,
-          min: 0,
-          max: 120,
-        ),
+        icon: icon,
       ),
     );
   }

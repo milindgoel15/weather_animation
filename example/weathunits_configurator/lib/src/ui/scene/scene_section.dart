@@ -10,14 +10,14 @@ import '../shared/slider_widget.dart';
 
 class SceneSection extends ConsumerWidget {
   const SceneSection({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Column(
+    return const Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: const [
+      children: [
         Flexible(
           child: Padding(
             padding: EdgeInsets.all(6.0),
@@ -35,7 +35,7 @@ class SceneSection extends ConsumerWidget {
 }
 
 class _WeathersOnScene extends ConsumerWidget {
-  const _WeathersOnScene({Key? key}) : super(key: key);
+  const _WeathersOnScene({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -61,12 +61,12 @@ class _WeathersOnScene extends ConsumerWidget {
               border: isBeyondCanvas
                   ? Border.all(
                       color: Colors.red,
-                      strokeAlign: StrokeAlign.outside,
+                      strokeAlign: BorderSide.strokeAlignOutside,
                       width: 4.0,
                     )
                   : Border.all(
                       width: 0.5,
-                      strokeAlign: StrokeAlign.outside,
+                      strokeAlign: BorderSide.strokeAlignOutside,
                     ),
             ),
             children: [
@@ -83,41 +83,34 @@ class _WeathersOnScene extends ConsumerWidget {
 class _WeatherWidgetOnScene extends ConsumerWidget {
   const _WeatherWidgetOnScene(
     this.unit, {
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final Weathunit unit;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    switch (unit.type) {
-      case TypeWeather.sun:
-        return SunWidget(sunConfig: unit.config as SunConfig);
-      case TypeWeather.rain:
-        return RainWidget(rainConfig: unit.config as RainConfig);
-      case TypeWeather.thunder:
-        return ThunderWidget(thunderConfig: unit.config as ThunderConfig);
-      case TypeWeather.snow:
-        return SnowWidget(snowConfig: unit.config as SnowConfig);
-      case TypeWeather.cloud:
-        return CloudWidget(cloudConfig: unit.config as CloudConfig);
-      case TypeWeather.wind:
-        return WindWidget(windConfig: unit.config as WindConfig);
-    }
+    return switch (unit.type) {
+      TypeWeather.sun => SunWidget(sunConfig: unit.config as SunConfig),
+      TypeWeather.rain => RainWidget(rainConfig: unit.config as RainConfig),
+      TypeWeather.thunder =>
+        ThunderWidget(thunderConfig: unit.config as ThunderConfig),
+      TypeWeather.snow => SnowWidget(snowConfig: unit.config as SnowConfig),
+      TypeWeather.cloud => CloudWidget(cloudConfig: unit.config as CloudConfig),
+      TypeWeather.wind => WindWidget(windConfig: unit.config as WindConfig)
+    };
   }
 }
 
 class SizerWidget extends ConsumerWidget {
   const SizerWidget({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final width = ref.watch(MainController.widthCanvas.state);
-    final height = ref.watch(MainController.heightCanvas.state);
-
-    final theme = Theme.of(context);
+    final width = ref.watch(MainController.widthCanvas);
+    final height = ref.watch(MainController.heightCanvas);
 
     return Row(
       mainAxisSize: MainAxisSize.min,
@@ -131,8 +124,10 @@ class SizerWidget extends ConsumerWidget {
               SliderWidget(
                 min: 0.0,
                 max: 3000.0,
-                value: width.state,
-                onChanged: (double value) => width.state = value,
+                value: width,
+                onChanged: (double value) => ref
+                    .read(MainController.widthCanvas.notifier)
+                    .update((_) => value),
                 isShowValue: true,
                 isShowReset: true,
                 onReset: () => ref.refresh(MainController.widthCanvas),
@@ -140,8 +135,10 @@ class SizerWidget extends ConsumerWidget {
               SliderWidget(
                 min: 0.0,
                 max: 3000.0,
-                value: height.state,
-                onChanged: (double value) => height.state = value,
+                value: height,
+                onChanged: (double value) => ref
+                    .read(MainController.heightCanvas.notifier)
+                    .update((_) => value),
                 isShowValue: true,
                 isShowReset: true,
                 onReset: () => ref.refresh(MainController.heightCanvas),
@@ -156,8 +153,8 @@ class SizerWidget extends ConsumerWidget {
 
 class _AspectRatioWidget extends ConsumerWidget {
   const _AspectRatioWidget({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

@@ -1,6 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:weather_animation/weather_animation.dart';
-import 'package:weathunits_configurator/src/extension/hex_color.dart';
 
 import '../controllers/main_controller.dart';
 import '../controllers/weathunits_controller.dart';
@@ -15,29 +13,26 @@ String getCode(WidgetRef ref) {
   final StringBuffer unitsList = StringBuffer();
   for (final unit in units) {
     unitsList.write(
-      () {
-            switch (unit.type) {
-              case TypeWeather.sun:
-                return '$SunWidget(sunConfig';
-              case TypeWeather.rain:
-                return '$RainWidget(rainConfig';
-              case TypeWeather.thunder:
-                return '$ThunderWidget(thunderConfig';
-              case TypeWeather.snow:
-                return '$SnowWidget(snowConfig';
-              case TypeWeather.cloud:
-                return '$CloudWidget(cloudConfig';
-              case TypeWeather.wind:
-                return '$WindWidget(windConfig';
-            }
-          }() +
+      switch (unit.type) {
+            TypeWeather.sun => 'SunWidget(sunConfig',
+            TypeWeather.rain => 'RainWidget(rainConfig',
+            TypeWeather.thunder => 'ThunderWidget(thunderConfig',
+            TypeWeather.snow => 'SnowWidget(snowConfig',
+            TypeWeather.cloud => 'CloudWidget(cloudConfig',
+            TypeWeather.wind => 'WindWidget(windConfig'
+          } +
           ': ${unit.config},),\n',
     );
   }
 
   final StringBuffer colorsList = StringBuffer();
   for (final color in ref.read(backgroundColorsProvider)) {
-    colorsList.write('Color(${color.hexMaterial}),\n');
+    colorsList.write('Color.from('
+        'alpha: ${color.a.toStringAsFixed(4)}, '
+        'red: ${color.r.toStringAsFixed(4)}, '
+        'green: ${color.g.toStringAsFixed(4)}, '
+        'blue:${color.b.toStringAsFixed(4)}),'
+        '\n');
   }
 
   ref.read(BackgroundColorsNotifier.isLeftCornerGradient);
@@ -48,18 +43,22 @@ String getCode(WidgetRef ref) {
   final height = ref.read(MainController.heightCanvas);
 
   final String content = '''
+  // ignore_for_file: avoid_redundant_argument_values
   return const WrapperScene(
     sizeCanvas: Size($width, $height),
     isLeftCornerGradient: $isLeftCornerGradient,
     colors: [
-      ${colorsList.toString()}],
+      $colorsList],
     children: [
-      ${unitsList.toString()}],
+      $unitsList],
   );
   ''';
 
-  return content.replaceAllMapped(RegExp(r'IconData\([A-Z0-9+]*\)'), (match) {
-    final code = match[0]!.split('+')[1].replaceFirst(')', '');
-    return "IconData(${int.parse(code, radix: 16)}, fontFamily: 'MaterialIcons')";
-  });
+  return content
+      .replaceAllMapped(RegExp(r'IconData\([A-Z0-9+]*\)'), (match) {
+        final code = match[0]!.split('+')[1].replaceFirst(')', '');
+        return "IconData(${int.parse(code, radix: 16)}, fontFamily: 'MaterialIcons')";
+      })
+      .replaceAll('Color(', 'Color.from(')
+      .replaceAll(', colorSpace: ColorSpace.sRGB)', ')');
 }

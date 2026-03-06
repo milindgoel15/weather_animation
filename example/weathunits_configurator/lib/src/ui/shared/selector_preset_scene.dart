@@ -6,7 +6,7 @@ import 'package:weathunits_configurator/src/controllers/main_controller.dart';
 import 'tooltip_widget.dart';
 
 class PresetScenesDropButton extends ConsumerWidget {
-  const PresetScenesDropButton({Key? key}) : super(key: key);
+  const PresetScenesDropButton({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -45,7 +45,7 @@ class PresetScenesDropButton extends ConsumerWidget {
           }
 
           return [
-            for (var item in allScenes) wrap(item.name),
+            for (final item in allScenes) wrap(item.name),
             wrap('empty'),
           ];
         },

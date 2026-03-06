@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 
 final themeModeProvider = StateProvider<ThemeMode>((ref) {
   return ThemeMode.system;
@@ -22,6 +23,7 @@ class ThemeModeSwitch extends ConsumerWidget {
 
 class _ThemeModeSwitch extends StatelessWidget {
   const _ThemeModeSwitch({
+    // ignore: unused_element
     super.key,
     required this.themeMode,
     required this.onChanged,
@@ -42,14 +44,11 @@ class _ThemeModeSwitch extends StatelessWidget {
       renderBorder: false,
       isSelected: isSelected,
       onPressed: (int newIndex) {
-        switch (newIndex) {
-          case 0:
-            return onChanged(ThemeMode.light);
-          case 1:
-            return onChanged(ThemeMode.system);
-          case 2:
-            return onChanged(ThemeMode.dark);
-        }
+        onChanged(switch (newIndex) {
+          0 => ThemeMode.light,
+          1 => ThemeMode.system,
+          2 || _ => ThemeMode.dark,
+        });
       },
       children: const <Widget>[
         Icon(Icons.wb_sunny_rounded),

@@ -1,3 +1,4 @@
+import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,8 +12,8 @@ import 'config_background_widget.dart';
 
 class ConfigSection extends ConsumerWidget {
   const ConfigSection({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -68,7 +69,7 @@ class ConfigSection extends ConsumerWidget {
             key: ValueKey(tEntry.key),
             value: tEntry.value,
             secondary: Text('<${tEntry.value.runtimeType}>'),
-            title: Text('${tEntry.key}: ${tEntry.value.toString()}'),
+            title: Text('${tEntry.key}: ${tEntry.value}'),
             onChanged: (bool value) {
               ref.read(listWeathunitProvider.notifier).updateRaw(
                     MapEntry(tEntry.key, value),
@@ -85,7 +86,7 @@ class ConfigSection extends ConsumerWidget {
             entry: tEntry,
             onColorChanged: (Color color) {
               ref.read(listWeathunitProvider.notifier).updateRaw(
-                    MapEntry(tEntry.key, color.value.toString()),
+                    MapEntry(tEntry.key, color.value32bit.toString()),
                     currentConfig,
                   );
             },
@@ -147,8 +148,8 @@ class _ColorPick extends ConsumerWidget {
   const _ColorPick({
     this.onColorChanged,
     required this.entry,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final ValueChanged<Color>? onColorChanged;
 
@@ -200,8 +201,8 @@ class _TileConfigWidget<T extends num> extends ConsumerWidget {
   const _TileConfigWidget({
     required this.entry,
     required this.onChanged,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final MapEntry<String, T> entry;
   final void Function(double)? onChanged;
@@ -218,7 +219,7 @@ class _TileConfigWidget<T extends num> extends ConsumerWidget {
           minVerticalPadding: 0.0,
           visualDensity: VisualDensity.compact,
           leading: Text('<${value.runtimeType}>'),
-          title: Text('$field: ${value.toString()}'),
+          title: Text('$field: $value'),
           trailing: IconButton(
             icon: const Icon(Icons.copy_rounded),
             onPressed: () async {

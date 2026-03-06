@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:weathunits_configurator/src/controllers/main_controller.dart';
 import 'package:weathunits_configurator/src/extension/hex_color.dart';
 
@@ -20,6 +21,7 @@ class BackgroundColorsNotifier extends StateNotifier<List<Color>> {
   BackgroundColorsNotifier(this._ref)
       : super(_ref.watch(MainController.selectedWidgetScene)?.colors ?? []);
 
+  // ignore: unused_field
   final Ref _ref;
 
   static final isLeftCornerGradient = StateProvider<bool>((ref) =>
@@ -58,8 +60,8 @@ class BackgroundColorsNotifier extends StateNotifier<List<Color>> {
 
 class BackgroundConfigWidget extends ConsumerWidget {
   const BackgroundConfigWidget({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -119,7 +121,7 @@ class BackgroundConfigWidget extends ConsumerWidget {
                   ),
                   title: Text('Color(${item.hexMaterial})'),
                   selected: isSelectedTile,
-                  selectedTileColor: theme.primaryColor.withOpacity(0.3),
+                  selectedTileColor: theme.primaryColor.withValues(alpha: 0.3),
                   onTap: () {
                     ref.read(_selectedTileIndexProvider.notifier).state = index;
                     ref.read(_selectedPickerProvider.notifier).state = item;
@@ -180,8 +182,8 @@ class BackgroundConfigWidget extends ConsumerWidget {
 
 class _PickerWidget extends ConsumerWidget {
   const _PickerWidget({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -199,16 +201,14 @@ class _PickerWidget extends ConsumerWidget {
               .update(selectedTileIndex, color);
         }
 
-        ref.watch(_selectedPickerProvider.notifier).state = color;
+        ref.read(_selectedPickerProvider.notifier).state = color;
       },
-      // color: item,
     );
   }
 }
 
 class _AnimatedIconDelete extends StatefulWidget {
-  const _AnimatedIconDelete({required this.onPressed, Key? key})
-      : super(key: key);
+  const _AnimatedIconDelete({required this.onPressed, super.key});
 
   final Function() onPressed;
 

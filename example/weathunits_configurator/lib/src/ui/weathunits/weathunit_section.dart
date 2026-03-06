@@ -8,8 +8,8 @@ import '../shared/tool_bar_widget.dart';
 
 class WeathunitSection extends ConsumerWidget {
   const WeathunitSection({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -95,8 +95,8 @@ class WeathunitSection extends ConsumerWidget {
 
 class _TileBgWidget extends ConsumerWidget {
   const _TileBgWidget({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -108,7 +108,7 @@ class _TileBgWidget extends ConsumerWidget {
       padding: const EdgeInsets.all(2.0),
       child: ListTile(
         selected: selected,
-        selectedTileColor: theme.primaryColor.withOpacity(0.3),
+        selectedTileColor: theme.primaryColor.withValues(alpha: 0.3),
         onTap: () {
           // at null we show backgroundConfig
           ref.read(selectedWeathunitProvider.notifier).state = null;
@@ -127,8 +127,8 @@ class _TileSceneWidget extends ConsumerWidget {
   const _TileSceneWidget(
     this.index,
     this.item, {
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final int index;
 
@@ -148,7 +148,7 @@ class _TileSceneWidget extends ConsumerWidget {
         ),
       ),
       selected: isSelected,
-      selectedTileColor: theme.primaryColor.withOpacity(0.3),
+      selectedTileColor: theme.primaryColor.withValues(alpha: 0.3),
       onTap: () => ref.read(selectedWeathunitProvider.notifier).state = item,
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
