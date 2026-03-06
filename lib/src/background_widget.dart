@@ -10,8 +10,7 @@ class BackgroundWidget extends StatelessWidget {
     bool? isLeftCorner,
     bool? isBackgroundShown,
   })  : isLeftCorner = isLeftCorner ?? false,
-        isBackgroundShown = isBackgroundShown ?? true,
-        super(key: key);
+        isBackgroundShown = isBackgroundShown ?? true;
 
   /// List of colors for creating a linear gradient.
   final List<Color> colors;
